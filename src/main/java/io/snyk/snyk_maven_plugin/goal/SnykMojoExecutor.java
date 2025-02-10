@@ -29,6 +29,19 @@ public class SnykMojoExecutor implements MojoExecutor {
         this.mojo = mojo;
     }
 
+    /**
+     * Executes the snyk command or skips execution based on the plugin configuration.
+     * @example
+     * void result = SnykMojoExecutor.execute();
+     * // This will execute the Snyk command and handle its exit code accordingly.
+     * @param {void} None - This method does not take any parameters.
+     * @return {void} - This method does not return any value.
+     * @description
+     *   - Handles different exit codes returned by the Snyk command execution.
+     *   - Uses Mojo configuration to decide whether to skip the command execution.
+     *   - Logs messages based on the outcome of the command or if execution is skipped.
+     *   - Throws exceptions when the Snyk command results in an error exit code and fails on issues.
+     */
     @Override
     public void execute() throws MojoFailureException, MojoExecutionException {
         if (mojo.shouldSkip()) {
@@ -54,6 +67,19 @@ public class SnykMojoExecutor implements MojoExecutor {
         }
     }
 
+    /**
+     * Executes a specified command and returns the exit status.
+     * @example
+     * int status = executeCommand();
+     * System.out.println(status); // Expected output: 0 for success, other for failure
+     * @return {int} - The exit status of the executed command, typically 0 for success.
+     * @throws {MojoExecutionException} - If an error occurs during command execution.
+     * @description
+     *   - Downloads the executable if not provided and sets up the command line for execution.
+     *   - Logs the snyk executable path and version for debugging purposes.
+     *   - Ensures the command is executed within the project's root directory.
+     *   - Handles all exceptions by throwing a MojoExecutionException with the original message.
+     */
     private int executeCommand() throws MojoExecutionException {
         try {
             Log log = mojo.getLog();
@@ -94,6 +120,18 @@ public class SnykMojoExecutor implements MojoExecutor {
         return project.getBasedir();
     }
 
+    /**
+     * Retrieves the version of the executable located at the specified path.
+     * @example
+     * String result = getVersion("/path/to/executable");
+     * System.out.println(result); // Expected output: e.g. "1.0.0"
+     * @param {String} executablePath - The path to the executable for which the version is being retrieved.
+     * @return {String} - A string representing the version of the executable.
+     * @description
+     *   - Executes a command to fetch version details using a command line process.
+     *   - Collects the standard output of the process execution.
+     *   - Trims the collected output to remove any surrounding white spaces.
+     */
     private String getVersion(String executablePath) {
         ProcessBuilder versionCommandLine = CommandLine.asProcessBuilder(
             executablePath,
